@@ -73,7 +73,7 @@ This approach keeps the client functional even when Yahoo changes internal behav
 ### 1. Clone the repository
 
 ```
-git clone https://github.com/YOUR_USER/openfinancedata
+git clone https://github.com/wilianAlbrecht/OpenFinanceData
 cd openfinancedata
 ```
 
