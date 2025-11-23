@@ -2,6 +2,8 @@ package com.financial.openfinancedata.controller;
 
 import com.financial.openfinancedata.yahoo.YahooChartClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,12 +13,12 @@ public class ChartController {
 
     private final YahooChartClient chartClient;
 
-    @GetMapping("/{symbol}")
-    public String getHistory(
+    @GetMapping(value = "/{symbol}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getHistory(
             @PathVariable String symbol,
             @RequestParam String range,
             @RequestParam String interval) {
 
-        return chartClient.getHistory(symbol, range, interval);
+        return ResponseEntity.ok(chartClient.getHistory(symbol, range, interval));
     }
 }
