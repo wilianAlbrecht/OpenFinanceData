@@ -19,9 +19,22 @@ Most Java developers face a common problem:
 - OpenFinanceData fills this gap.
 - It enables developers, analysts, and students to access financial data directly from Yahoo’s public endpoints, without rate limits or API keys.
 
+
+# Project status
+
+OpenFinanceData is currently in active development.
+The project is evolving, and its structure, features, and overall design may change as new capabilities are added.
+
+At this stage, the library focuses solely on retrieving raw financial data—such as market prices, historical data, and fundamental information—from publicly accessible Yahoo Finance endpoints.
+It does not calculate financial indicators or ratios.
+
+If you're looking for processed financial indicators (such as P/L, ROE, ROA, margins, yields, and more), feel free to take a look at my other project:
+➡ [ Financial Indicators API ] (https://github.com/wilianAlbrecht/financial-indicators-api) — a dedicated REST API for computing financial metrics.
+
+As OpenFinanceData grows, community feedback, suggestions, and contributions are highly appreciated.
   
 
-# What you can do with OpenFinanceData (current goals)
+# What you can do with OpenFinanceData
 
 Fetch real-time quote information
 Retrieve historical price data (candles)
@@ -37,18 +50,7 @@ Designed for backend services, trading tools, dashboards, and educational projec
 
 
 
-# Project status
 
-OpenFinanceData is currently in active development.
-The project is evolving, and its structure, features, and overall design may change as new capabilities are added.
-
-At this stage, the library focuses solely on retrieving raw financial data—such as market prices, historical data, and fundamental information—from publicly accessible Yahoo Finance endpoints.
-It does not calculate financial indicators or ratios.
-
-If you're looking for processed financial indicators (such as P/L, ROE, ROA, margins, yields, and more), feel free to take a look at my other project:
-➡ [Financial Indicators API] (https://github.com/wilianAlbrecht/financial-indicators-api) — a dedicated REST API for computing financial metrics.
-
-As OpenFinanceData grows, community feedback, suggestions, and contributions are highly appreciated.
 
 
 
