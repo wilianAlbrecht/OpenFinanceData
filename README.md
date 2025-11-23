@@ -1,4 +1,4 @@
-🇧🇷 Português | 🇺🇸 [English](README.en.md) | 🇨🇳 [中文](README.zh.md)
+🇧🇷 [Português](README.md)  | 🇺🇸 [English](README.en.md) | 🇨🇳 [中文](README.zh.md)
 
 # OpenFinanceData
 
