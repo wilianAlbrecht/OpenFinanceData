@@ -31,8 +31,7 @@ It does not calculate financial indicators or ratios.
 If you're looking for processed financial indicators (such as P/L, ROE, ROA, margins, yields, and more), feel free to take a look at my other project:
 ➡ **[Financial Indicators API](https://github.com/wilianAlbrecht/financial-indicators-api)** — a dedicated REST API for computing financial metrics.
 
-As OpenFinanceData grows, community feedback, suggestions, and contributions are highly appreciated.
-  
+
 
 # What you can do with OpenFinanceData
 
