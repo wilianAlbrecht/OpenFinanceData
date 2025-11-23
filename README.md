@@ -1,3 +1,5 @@
+🇧🇷 Português | 🇺🇸 [English](README.en.md) | 🇨🇳 [中文](README.zh.md)
+
 # OpenFinanceData
 
 OpenFinanceData é um cliente Java criado para oferecer acesso confiável, direto e estruturado aos dados públicos do Yahoo Finance. O objetivo é simples: **entregar uma ferramenta técnica, estável e fácil de integrar**, especialmente útil em ambientes onde precisão e consistência são fundamentais.
