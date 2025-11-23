@@ -1,43 +1,31 @@
 # OpenFinanceData
 
-Cliente Java moderno para coleta de dados brutos do Yahoo Finance, projetado para ser estável, modular e fácil de integrar em outros serviços — incluindo APIs que calculam indicadores financeiros.
+OpenFinanceData é um cliente Java criado para oferecer acesso confiável, direto e estruturado aos dados públicos do Yahoo Finance. O objetivo é simples: **entregar uma ferramenta técnica, estável e fácil de integrar**, especialmente útil em ambientes onde precisão e consistência são fundamentais.
 
 ## Por que este projeto existe
 
-A maioria dos desenvolvedores Java enfrenta um problema comum:
+O mercado carece de uma forma simples, consistente e acessível de obter dados financeiros completos a partir de fontes públicas. Muitas APIs gratuitas entregam apenas informações básicas, enquanto serviços mais completos exigem assinaturas caras. O OpenFinanceData foi criado para suprir essa necessidade: uma solução direta e estável que centraliza dados fundamentais, estatísticas, resultados, perfil corporativo e histórico de preços em um único ponto de acesso, utilizável por qualquer aplicação capaz de fazer requisições HTTP.
 
-* APIs gratuitas raramente fornecem dados fundamentais completos;
-* Muitos serviços exigem assinaturas caras;
-* As bibliotecas Java existentes cobrem apenas preços históricos — não fundamentals;
-* Python possui ferramentas excelentes (como *yfinance*), mas Java não.
+## O que você pode fazer com OpenFinanceData
 
-**OpenFinanceData resolve esse problema.**
-Ele permite que desenvolvedores, analistas e estudantes acessem dados financeiros diretamente dos endpoints públicos do Yahoo, sem limites de requisição e sem API keys.
-
-### O que você pode fazer com OpenFinanceData
-
-* Obter **quotes em tempo real**;
-* Buscar **histórico de preços** (candles OHLC);
-* Coletar dados fundamentais brutos;
-* 100% open source e gratuito;
-* Ideal para sistemas backend, ferramentas de trading, dashboards e projetos educacionais.
-  O **OpenFinanceData** tem como propósito:
-* Obter **dados brutos** do Yahoo Finance (quotes, históricos, fundamentals, earnings, profile);
-* Utilizar uma arquitetura **estável**, baseada em cookies e crumb atualizados dinamicamente;
-* Servir como camada de dados para projetos como análise de indicadores, dashboards ou APIs REST;
-* Ser totalmente acessível por HTTP via endpoints já prontos.
+* Consultar cotações em tempo real.
+* Obter histórico de preços com diferentes períodos e intervalos.
+* Acessar dados fundamentais (resultados, balanços, fluxo de caixa, etc.).
+* Consultar estatísticas de mercado.
+* Obter informações completas de perfil corporativo.
+* Integrar facilmente esses dados em APIs, sistemas de análise, dashboards ou ferramentas de trading.
 
 ## Tecnologias Utilizadas
 
-* **Java 21**
-* **Spring Boot 3** (Web, WebFlux, Validation, Security)
-* **Java HttpClient** (simulação de navegador)
-* **CookieManager** + **CrumbManager** (gestão completa de sessão)
-* **Selenium** (captura inicial de cookies quando necessário)
-* **Jackson**
-* **Maven Wrapper**
-* **Lombok**
-* **JUnit 5** + **Mockito**
+* Java 21
+* Spring Boot 3 (Web, WebFlux, Validation, Security)
+* Java HttpClient (simulação de navegador)
+* CookieManager e CrumbManager (gestão de sessão)
+* Selenium (captura inicial de cookies quando necessário)
+* Jackson
+* Maven Wrapper
+* Lombok
+* JUnit 5 e Mockito
 
 ## Arquitetura Interna
 
@@ -45,10 +33,10 @@ Ele permite que desenvolvedores, analistas e estudantes acessem dados financeiro
 openfinancedata/
  ├── external/
  │    ├── yahoo/
- │    │     ├── client/ (requisições HTTP reais)
- │    │     ├── models/ (dados retornados)
- │    │     ├── crumb/ (lógica de crumb + cookies)
- │    │     └── parser/ (tratamento de JSON instável)
+ │    │     ├── client/        # Requisições HTTP reais
+ │    │     ├── models/        # Estruturas de dados
+ │    │     ├── crumb/         # Lógica de cookies + crumb
+ │    │     └── parser/        # Tratamento de respostas instáveis
  │    └── ...
  ├── service/
  │    ├── YahooDataService
@@ -66,13 +54,17 @@ openfinancedata/
 
 ## Como o OpenFinanceData trabalha com o Yahoo Finance
 
-1. Coleta de cookies visitando `fc.yahoo.com` ou `finance.yahoo.com`;
-2. Obtenção do **crumb** usando headers completos simulando navegador;
-3. Validação se o crumb é string e não JSON de erro;
-4. Revalidação periódica de cookies e crumb;
-5. Todas as requisições usam o mesmo contexto de sessão.
+O Yahoo Finance utiliza mecanismos de proteção como cookies, headers específicos e o famoso **crumb**, necessário para validar requisições mais sensíveis.
 
-Este fluxo garante que o cliente continue funcionando mesmo com restrições recentes impostas pelo Yahoo.
+O OpenFinanceData resolve isso automaticamente por meio de um fluxo consistente:
+
+1. Captura inicial de cookies visitando os domínios do Yahoo.
+2. Solicitação do crumb usando cabeçalhos que simulam um navegador real.
+3. Validação da resposta para garantir consistência.
+4. Renovação periódica da sessão para evitar falhas.
+5. Reutilização do mesmo contexto em todas as requisições.
+
+Essa abordagem mantém o cliente funcional mesmo quando o Yahoo altera detalhes internos.
 
 ## Como Executar o Projeto
 
@@ -91,82 +83,75 @@ cd openfinancedata
 
 ### 3. Acessar a API
 
-Os endpoints ficam em:
-
 ```
 http://localhost:8080/api/yahoo/
 ```
 
 ## Endpoints Disponíveis
 
-A API expõe múltiplos endpoints para acessar diferentes tipos de dados do Yahoo Finance. Abaixo está a lista completa, incluindo seus parâmetros.
+Abaixo estão todos os endpoints fornecidos pela API, com seus parâmetros.
 
 ### Quotes
 
 `GET /api/yahoo/quote/{symbol}`
 
-* **symbol**: ticker da ação (ex: PETR4, AAPL, MSFT)
+* **symbol** — ticker da ação
 
-### Demonstrativos Financeiros (Financials)
+### Demonstrativos Financeiros
 
 `GET /api/yahoo/financials/{symbol}`
 
-* **symbol**: ticker da empresa
-* Retorna: Income Statement, Balance Sheet, Cash Flow
+* **symbol** — ticker da empresa
+* Inclui: *Income Statement*, *Balance Sheet*, *Cash Flow*
 
-### Perfil da Empresa (Profile)
+### Perfil da Empresa
 
 `GET /api/yahoo/profile/{symbol}`
 
-* **symbol**: ticker da empresa
+* **symbol** — ticker
 
-### Earnings (Resultados)
+### Earnings
 
 `GET /api/yahoo/earnings/{symbol}`
 
-* **symbol**: ticker
-* Retorna earnings anuais e trimestrais
+* **symbol** — ticker
+* Retorna resultados anuais e trimestrais
 
-### Histórico (Historical Prices)
+### Histórico de Preços
 
 `GET /api/yahoo/history/{symbol}`
 
-* **symbol**: ticker
-* **range** (opcional): período
-
-  * aceito: `1d`, `5d`, `1mo`, `3mo`, `6mo`, `1y`, `2y`, `5y`, `10y`, `ytd`, `max`
-* **interval** (opcional): intervalo dos candles
-
-  * aceito: `1m`, `2m`, `5m`, `15m`, `1h`, `1d`, `1wk`, `1mo`
+* **symbol** — ticker
+* **range** (opcional): 1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max
+* **interval** (opcional): 1m, 2m, 5m, 15m, 1h, 1d, 1wk, 1mo
 
 ### Utilidades Internas
 
 `GET /api/yahoo/status`
 
-* Retorna informações de saúde do client, cookies e crumb
+* Retorna dados sobre sessão atual (cookies, crumb, etc.)
 
-### Atualização Manual de Sessão
+### Atualização Manual da Sessão
 
 `POST /api/yahoo/refresh`
 
-* Força atualização de cookies e crumb/{symbol}?range=1y` – histórico de preços
+* Força uma atualização de cookies e crumb
 
 ## Campos Retornados pela API
 
-A API retorna uma ampla variedade de dados brutos diretamente dos endpoints do Yahoo Finance. Abaixo está a lista dos principais campos disponibilizados:
+A API retorna diversos conjuntos de dados. Aqui estão os principais grupos.
 
-### Quote (Cotação em Tempo Real)
+### Quote (tempo real)
 
 * Preço atual
 * Variação absoluta
 * Variação percentual
-* Preço de abertura
-* Máxima e mínima do dia
+* Abertura
+* Máxima e mínima
 * Volume
 * Market Cap
-* Preço médio do dia
+* Preço médio
 * Fechamento anterior
-* Tipo do mercado / estado
 
 ### Histórico (OHLCV)
 
@@ -175,55 +160,54 @@ A API retorna uma ampla variedade de dados brutos diretamente dos endpoints do Y
 * Low
 * Close
 * Volume
-* Data/hora do candle
-* Ajuste de preço
+* Timestamp
+* Ajustes
 
-### Demonstrativos Financeiros (Fundamentals)
+### Demonstrativos Financeiros
 
-* Income Statement (Demonstração de Resultados)
+**Income Statement**
 
-  * Revenue
-  * Net Income
-  * Gross Profit
-  * Operating Income
-  * EPS
-* Balance Sheet (Balanço Patrimonial)
+* Receita
+* Lucro líquido
+* EPS
+* Lucro bruto
+* Resultado operacional
 
-  * Total Assets
-  * Total Liabilities
-  * Shareholder Equity
-  * Cash & Equivalents
-* Cash Flow Statement (Fluxo de Caixa)
+**Balance Sheet**
 
-  * Operating Cash Flow
-  * Investing Cash Flow
-  * Financing Cash Flow
-  * Free Cash Flow
+* Ativos totais
+* Passivos totais
+* Patrimônio
+* Caixa e equivalentes
 
-### Estatísticas (Key Statistics)
+**Cash Flow**
 
-* P/E Ratio
+* Fluxo de caixa operacional
+* Fluxo de caixa de investimento
+* Fluxo de caixa de financiamento
+* Free Cash Flow
+
+### Estatísticas
+
+* P/E
 * Forward P/E
 * Beta
 * Price to Book
 * Dividend Yield
 * Earnings Date
-* PEG Ratio
 * EPS (TTM)
+* PEG Ratio
 
-### Perfil da Empresa (Company Profile)
+### Perfil da Empresa
 
-* Nome da empresa
+* Nome
 * Setor
 * Indústria
-* Descrição do negócio
-* Número de funcionários
-* Endereço completo
-* Localização
+* Endereço
+* Funcionários
 * Website oficial
+* Descrição
 
 ## Agradecimento
 
-Obrigado pelo interesse no OpenFinanceData! O foco principal do projeto é **manter um cliente Java estável**, resiliente às constantes mudanças do Yahoo Finance, garantindo que os dados continuem acessíveis mesmo quando o Yahoo altera endpoints, cookies, headers ou estruturas internas.
-
-A prioridade é a **manutenção contínua**, correções rápidas e melhorias na robustez — acima de novas features — para que o OpenFinanceData permaneça confiável a longo prazo.
+Obrigado por utilizar o OpenFinanceData. O foco do projeto é **manter uma solução sólida e confiável**, reagindo rapidamente a mudanças do Yahoo Finance e garantindo estabilidade de longo prazo. A manutenção contínua é prioridade absoluta.
