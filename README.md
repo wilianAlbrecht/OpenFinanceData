@@ -73,7 +73,7 @@ Essa abordagem mantém o cliente funcional mesmo quando o Yahoo altera detalhes 
 ### 1. Clonar
 
 ```
-git clone https://github.com/SEU_USUARIO/openfinancedata
+git clone https://github.com/wilianAlbrecht/OpenFinanceData
 cd openfinancedata
 ```
 
