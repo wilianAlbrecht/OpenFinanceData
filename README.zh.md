@@ -73,7 +73,7 @@ OpenFinanceData 通过以下流程自动处理这些细节：
 ### 1. 克隆仓库
 
 ```
-git clone https://github.com/YOUR_USER/openfinancedata
+git clone https://github.com/wilianAlbrecht/OpenFinanceData
 cd openfinancedata
 ```
 
