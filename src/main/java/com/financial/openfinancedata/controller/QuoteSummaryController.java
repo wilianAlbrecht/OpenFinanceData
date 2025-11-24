@@ -1,10 +1,15 @@
 package com.financial.openfinancedata.controller;
 
-import com.financial.openfinancedata.yahoo.YahooQuoteSummaryClient;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.financial.openfinancedata.yahoo.YahooQuoteSummaryClient;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
@@ -39,5 +44,11 @@ public class QuoteSummaryController {
     public ResponseEntity<String> getProfile(@PathVariable String symbol) {
         return ResponseEntity.ok(client.getModules(symbol,
                 "summaryProfile,assetProfile"));
+    }
+
+    @GetMapping(value = "/financialData/{symbol}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getFinancialData(@PathVariable String symbol) {
+        return ResponseEntity.ok(client.getModules(symbol,
+                "financialData"));
     }
 }
