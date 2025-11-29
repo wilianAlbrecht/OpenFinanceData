@@ -1,11 +1,12 @@
 package com.financial.openfinancedata.selenium;
 
-import jakarta.annotation.PreDestroy;
-import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Component;
+
+import jakarta.annotation.PreDestroy;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -19,18 +20,33 @@ public class SeleniumWebDriverProvider {
         initDriver();
     }
 
-    private synchronized void initDriver() {
-        try {
-            if (driver != null) {
-                try { driver.quit(); } catch (Exception ignored) {}
+    private void initDriver() {
+        int tentativas = 0;
+
+        while (tentativas < 10) {
+            try {
+                tentativas++;
+
+                if (driver != null) {
+                    try {
+                        driver.quit();
+                    } catch (Exception ignored) {
+                    }
+                }
+
+                driver = new ChromeDriver(chromeOptions);
+                log.info("WebDriver iniciado na tentativa {}", tentativas);
+                return;
+
+            } catch (Exception ex) {
+                log.warn("Falha ao iniciar WebDriver (tentativa {}): {}", tentativas, ex.getMessage());
+                driver = null;
+                sleepSafe(3000);
             }
-            driver = new ChromeDriver(chromeOptions);
-            log.info("Selenium WebDriver inicializado.");
-        } catch (Exception ex) {
-            driver = null;
-            log.error("Falha ao inicializar WebDriver: {}", ex.getMessage(), ex);
-            throw ex;
         }
+
+        throw new RuntimeException(
+                "Não foi possível iniciar o WebDriver após " + tentativas + " tentativas.");
     }
 
     /**
@@ -38,7 +54,8 @@ public class SeleniumWebDriverProvider {
      */
     public synchronized WebDriver getDriver() {
         try {
-            if (driver == null) initDriver();
+            if (driver == null)
+                initDriver();
             return driver;
         } catch (Exception ex) {
             log.warn("Erro ao obter driver; tentando reinstanciar: {}", ex.getMessage());
@@ -66,6 +83,13 @@ public class SeleniumWebDriverProvider {
             log.warn("Erro ao finalizar WebDriver: {}", ex.getMessage());
         } finally {
             driver = null;
+        }
+    }
+
+    private void sleepSafe(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ignored) {
         }
     }
 }
