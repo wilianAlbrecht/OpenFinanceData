@@ -1,14 +1,16 @@
 package com.financial.openfinancedata.yahoo;
 
-import com.financial.openfinancedata.model.ModelSession;
-import com.financial.openfinancedata.session.YahooSessionStore;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import org.springframework.stereotype.Service;
+
+import com.financial.openfinancedata.model.ModelSession;
+import com.financial.openfinancedata.session.YahooSessionStore;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class YahooQuoteSummaryClient {
 
     public String getModules(String symbol, String modules) {
 
-        symbol = urlBuilder.normalizeSymbol(symbol);
+        // symbol = urlBuilder.normalizeSymbol(symbol);
         ModelSession session = sessionStore.getCurrentState();
 
         if (!session.isValid()) {
