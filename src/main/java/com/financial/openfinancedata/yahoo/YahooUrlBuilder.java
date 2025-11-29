@@ -25,6 +25,7 @@ public class YahooUrlBuilder {
         return BASE + "/v8/finance/chart/" + symbol
                 + "?interval=" + interval
                 + "&range=" + range
+                + "&events=div" 
                 + "&crumb=" + crumb;
     }
 

@@ -1,14 +1,16 @@
 package com.financial.openfinancedata.yahoo;
 
-import com.financial.openfinancedata.session.YahooSessionStore;
-import com.financial.openfinancedata.model.ModelSession;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import org.springframework.stereotype.Service;
+
+import com.financial.openfinancedata.model.ModelSession;
+import com.financial.openfinancedata.session.YahooSessionStore;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class YahooQuoteClient {
     public String getQuotes(String symbols) {
 
         // Aplica normalização
-        String normalized = applyNormalization(symbols);
+        // String normalized = applyNormalization(symbols);
 
         // Obtém estado da sessão
         ModelSession session = sessionStore.getCurrentState();
@@ -34,7 +36,7 @@ public class YahooQuoteClient {
         String crumb = session.getCrumb();
 
         // Monta URL completa com crumb
-        String url = urlBuilder.quoteV7Endpoint(normalized, crumb);
+        String url = urlBuilder.quoteV7Endpoint(symbols, crumb);
 
         try {
 
