@@ -1,8 +1,11 @@
 package com.financial.openfinancedata.selenium;
 
+import java.net.URI;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PreDestroy;
@@ -34,9 +37,22 @@ public class SeleniumWebDriverProvider {
                     }
                 }
 
-                driver = new ChromeDriver(chromeOptions);
-                log.info("WebDriver iniciado na tentativa {}", tentativas);
-                return;
+               //identificar se está rodando no Docker ou localmente
+                String mode = System.getenv("SELENIUM_MODE");
+                boolean rodandoNoDocker = mode != null && mode.equalsIgnoreCase("docker");
+
+                //inicializar o driver no docker ou localmente
+                if (rodandoNoDocker) {
+                    log.info("Ambiente identificado: DOCKER : RemoteWebDriver");
+                    driver = new RemoteWebDriver(
+                            new URI("http://selenium:4444/wd/hub").toURL(),
+                            chromeOptions);
+                            return;
+                } else {
+                    log.info("Ambiente identificado: LOCAL : ChromeDriver");
+                    driver = new ChromeDriver(chromeOptions);
+                    return;
+                }
 
             } catch (Exception ex) {
                 log.warn("Falha ao iniciar WebDriver (tentativa {}): {}", tentativas, ex.getMessage());

@@ -71,7 +71,7 @@ public class SeleniumSessionKeeper {
 
             if (!clicked) {
                 log.info("Elemento alvo não encontrado — executando refresh.");
-                driver.navigate().refresh();
+                driver.navigate().to(driver.getCurrentUrl());
                 sleepSafe(1000);
             } else {
                 log.info("Elemento alvo clicado com sucesso para manter a sessão ativa.");
