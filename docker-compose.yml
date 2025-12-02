@@ -1,18 +1,15 @@
 services:
   selenium:
-    image: selenium/standalone-chrome:latest
+    image: selenium/standalone-chrome
     container_name: selenium
-    shm_size: 2gb
     ports:
       - "4444:4444"
 
   openfinancedata:
     build: .
+    image: openfinancedata:latest
     container_name: openfinancedata
+    environment:
+      SELENIUM_MODE: "docker"
     ports:
-      - "8081:8081"
-    depends_on:
-      - selenium
-
-environment:
-  - SELENIUM_MODE=docker
+      - "8080:8080"

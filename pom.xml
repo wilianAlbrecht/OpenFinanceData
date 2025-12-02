@@ -93,13 +93,13 @@
     </dependencies>
 
     <build>
-        <finalName>OpenFinanceData</finalName>
+        <finalName>openFinanceData</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <finalName>OpenFinanceData</finalName>
+                    <finalName>openFinanceData</finalName>
                 </configuration>
             </plugin>
             <plugin>
