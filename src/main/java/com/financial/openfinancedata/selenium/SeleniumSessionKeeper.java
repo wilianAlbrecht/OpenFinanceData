@@ -40,7 +40,6 @@ public class SeleniumSessionKeeper {
     @Scheduled(fixedRate = 300_000, initialDelay = 5_000)
     public void keepSessionAlive() {
 
-
         WebDriver driver;
         ModelSession newState = sessionStore.getCurrentState();
         // ModelSession newState = new ModelSession();
@@ -53,14 +52,7 @@ public class SeleniumSessionKeeper {
 
             // 1) Se já estivermos em outra página, garantir que vamos para
             // finance.yahoo.com
-            try {
-                driver.navigate().to("https://finance.yahoo.com");
-            } catch (WebDriverException e) {
-                log.warn("Navegação falhou; reiniciando driver e tentando novamente.");
-                driverProvider.restartDriver();
-                driver = driverProvider.getDriver();
-                driver.navigate().to("https://finance.yahoo.com");
-            }
+            driver = refreshPageOrWebDriver(driver);
 
             // dá um tempo para scripts carregarem
             sleepSafe(1500);
@@ -71,8 +63,7 @@ public class SeleniumSessionKeeper {
 
             if (!clicked) {
                 log.info("Elemento alvo não encontrado — executando refresh.");
-                driver.navigate().to(driver.getCurrentUrl());
-                sleepSafe(1000);
+                driver = refreshPageOrWebDriver(driver);
             } else {
                 log.info("Elemento alvo clicado com sucesso para manter a sessão ativa.");
             }
@@ -99,13 +90,20 @@ public class SeleniumSessionKeeper {
 
             // 4) Extrair crumb via JavaScript (tenta múltiplas expressões se necessário)
             String crumb = extractCrumb(driver);
-            newState.setCrumb(crumb);
 
-            newState.setCreatedAt(Instant.now());
-            newState.setValid(crumb != null && !crumb.isBlank());
+            if (crumb != null && !crumb.isBlank()) {
 
-            sessionStore.setCurrentState(newState);
-            log.info("Sessão Yahoo atualizada. Crumb presente? {} = {}", newState.isValid(), newState.getCrumb());
+                newState.setCrumb(crumb);
+
+                newState.setCreatedAt(Instant.now());
+                newState.setValid(crumb != null && !crumb.isBlank());
+
+                sessionStore.setCurrentState(newState);
+                log.info("Sessão Yahoo atualizada. Crumb presente? {} = {}", newState.isValid(), newState.getCrumb());
+
+            } else {
+
+            }
 
         } catch (Exception ex) {
             log.error("Falha ao atualizar sessão via Selenium: {}", ex.getMessage(), ex);
@@ -117,6 +115,22 @@ public class SeleniumSessionKeeper {
                 log.warn("Falha ao reiniciar driver no fallback: {}", e.getMessage());
             }
         }
+    }
+
+    private WebDriver refreshPageOrWebDriver(WebDriver driver) {
+
+        // tenta atualizar a pagina
+        try {
+            driver.navigate().to("https://finance.yahoo.com");
+        } catch (WebDriverException e) {
+
+            // se não reinicia o webdriver
+            log.warn("Navegação falhou; reiniciando driver e tentando novamente.");
+            driverProvider.restartDriver();
+            driver = driverProvider.getDriver();
+            driver.navigate().to("https://finance.yahoo.com");
+        }
+        return driver;
     }
 
     private boolean tryClickTarget(WebDriver driver) {
