@@ -34,10 +34,10 @@ public class SeleniumSessionKeeper {
     private static final String CLICK_TARGET_SELECTOR = "#ybar-logo";
 
     /**
-     * Agendado para rodar a cada 5 minutos (300_000 ms).
+     * Agendado para rodar a cada 15 minutos (900_000 ms).
      * Mantém a página ativa clicando/refresh e atualiza cookies + crumb.
      */
-    @Scheduled(fixedRate = 300_000, initialDelay = 5_000)
+    @Scheduled(fixedRate = 900_000, initialDelay = 5_000)
     public void keepSessionAlive() {
 
         WebDriver driver;
