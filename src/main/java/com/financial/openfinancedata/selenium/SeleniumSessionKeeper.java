@@ -99,7 +99,7 @@ public class SeleniumSessionKeeper {
                 newState.setValid(crumb != null && !crumb.isBlank());
 
                 sessionStore.setCurrentState(newState);
-                log.info("Sessão Yahoo atualizada. Crumb presente? {} = {}", newState.isValid(), newState.getCrumb());
+                log.info("Sessão Yahoo atualizada. Crumb presente? {}", newState.isValid());
 
             } else {
 

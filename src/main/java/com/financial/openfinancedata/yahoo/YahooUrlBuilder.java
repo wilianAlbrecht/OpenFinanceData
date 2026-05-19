@@ -1,6 +1,7 @@
 package com.financial.openfinancedata.yahoo;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class YahooUrlBuilder {
@@ -12,9 +13,13 @@ public class YahooUrlBuilder {
      * Permite qualquer conjunto de módulos.
      */
     public String quoteSummaryEndpoint(String symbol, String modules, String crumb) {
-        return BASE + "/v10/finance/quoteSummary/" + symbol
-                + "?modules=" + modules
-                + "&crumb=" + crumb;
+        return UriComponentsBuilder.fromUriString(BASE)
+                .pathSegment("v10", "finance", "quoteSummary", symbol)
+                .queryParam("modules", modules)
+                .queryParam("crumb", crumb)
+                .build()
+                .encode()
+                .toUriString();
     }
 
     /**
@@ -22,11 +27,15 @@ public class YahooUrlBuilder {
      * Range e interval dinâmicos.
      */
     public String chartEndpoint(String symbol, String range, String interval, String crumb) {
-        return BASE + "/v8/finance/chart/" + symbol
-                + "?interval=" + interval
-                + "&range=" + range
-                + "&events=div" 
-                + "&crumb=" + crumb;
+        return UriComponentsBuilder.fromUriString(BASE)
+                .pathSegment("v8", "finance", "chart", symbol)
+                .queryParam("interval", interval)
+                .queryParam("range", range)
+                .queryParam("events", "div")
+                .queryParam("crumb", crumb)
+                .build()
+                .encode()
+                .toUriString();
     }
 
     /**
@@ -34,14 +43,25 @@ public class YahooUrlBuilder {
      * Pode enviar vários símbolos separados por vírgula.
      */
     public String quoteV7Endpoint(String symbols, String crumb) {
-        return BASE + "/v7/finance/quote?symbols=" + symbols + "&crumb=" + crumb;
+        return UriComponentsBuilder.fromUriString(BASE)
+                .pathSegment("v7", "finance", "quote")
+                .queryParam("symbols", symbols)
+                .queryParam("crumb", crumb)
+                .build()
+                .encode()
+                .toUriString();
     }
 
     /**
      * Endpoint para busca/autocomplete (v1)
      */
     public String searchEndpoint(String query) {
-        return BASE + "/v1/finance/search?q=" + query;
+        return UriComponentsBuilder.fromUriString(BASE)
+                .pathSegment("v1", "finance", "search")
+                .queryParam("q", query)
+                .build()
+                .encode()
+                .toUriString();
     }
 
     /**

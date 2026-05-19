@@ -2,6 +2,7 @@ package com.financial.openfinancedata.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +17,17 @@ import com.financial.openfinancedata.service.unified.UnifiedPriceService;
 import com.financial.openfinancedata.service.unified.UnifiedProfileService;
 import com.financial.openfinancedata.yahoo.YahooQuoteSummaryClient;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 
+@Validated
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class QuoteSummaryController {
+
+    private static final String SYMBOL_PATTERN = "^[A-Za-z0-9.^=\\-]{1,30}$";
+    private static final String MODE_PATTERN = "^(original|modular|unified)$";
 
     private final YahooQuoteSummaryClient client;
     private final UnifiedFundamentalsService unifiedFundamentalsService;
@@ -32,7 +38,7 @@ public class QuoteSummaryController {
     private final UnifiedFinancialDataService unifiedFinancialDataService;
     
     @GetMapping(value = "/price/{symbol}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getPrice(@PathVariable String symbol, @RequestParam(required = false) String mode) {
+    public ResponseEntity<String> getPrice(@PathVariable @Pattern(regexp = SYMBOL_PATTERN) String symbol, @RequestParam(required = false) @Pattern(regexp = MODE_PATTERN) String mode) {
 
         String response = client.getModules(symbol, "price");
 
@@ -54,8 +60,8 @@ public class QuoteSummaryController {
     }
 
     @GetMapping(value = "/fundamentals/{symbol}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getFundamentals(@PathVariable String symbol,
-            @RequestParam(required = false) String mode) {
+    public ResponseEntity<String> getFundamentals(@PathVariable @Pattern(regexp = SYMBOL_PATTERN) String symbol,
+            @RequestParam(required = false) @Pattern(regexp = MODE_PATTERN) String mode) {
 
         String response = client.getModules(symbol, "summaryDetail,financialData,defaultKeyStatistics");
 
@@ -77,7 +83,7 @@ public class QuoteSummaryController {
     }
 
     @GetMapping(value = "/financials/{symbol}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getFinancials(@PathVariable String symbol, @RequestParam(required = false) String mode) {
+    public ResponseEntity<String> getFinancials(@PathVariable @Pattern(regexp = SYMBOL_PATTERN) String symbol, @RequestParam(required = false) @Pattern(regexp = MODE_PATTERN) String mode) {
 
 
         String response = client.getModules(symbol,
@@ -101,7 +107,7 @@ public class QuoteSummaryController {
     }
 
     @GetMapping(value = "/earnings/{symbol}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getEarnings(@PathVariable String symbol, @RequestParam(required = false) String mode) {
+    public ResponseEntity<String> getEarnings(@PathVariable @Pattern(regexp = SYMBOL_PATTERN) String symbol, @RequestParam(required = false) @Pattern(regexp = MODE_PATTERN) String mode) {
 
         String response = client.getModules(symbol, "earnings");
 
@@ -122,7 +128,7 @@ public class QuoteSummaryController {
     }
 
     @GetMapping(value = "/profile/{symbol}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getProfile(@PathVariable String symbol, @RequestParam(required = false) String mode) {
+    public ResponseEntity<String> getProfile(@PathVariable @Pattern(regexp = SYMBOL_PATTERN) String symbol, @RequestParam(required = false) @Pattern(regexp = MODE_PATTERN) String mode) {
 
 
         String response = client.getModules(symbol,"summaryProfile,assetProfile");
@@ -143,7 +149,7 @@ public class QuoteSummaryController {
     }
 
     @GetMapping(value = "/financialData/{symbol}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getFinancialData(@PathVariable String symbol, @RequestParam(required = false) String mode) {
+    public ResponseEntity<String> getFinancialData(@PathVariable @Pattern(regexp = SYMBOL_PATTERN) String symbol, @RequestParam(required = false) @Pattern(regexp = MODE_PATTERN) String mode) {
 
         String response = client.getModules(symbol, "financialData");
 
